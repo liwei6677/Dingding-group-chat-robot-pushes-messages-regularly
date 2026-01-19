@@ -15,13 +15,18 @@ def get_weather():
         # Check if the response contains the expected data structure
         if 'data' in res and 'list' in res['data'] and len(res['data']['list']) > 0:
             weather = res['data']['list'][0]
-            return weather['weather'], math.floor(weather['temp'])
+            # Validate that required keys exist in weather data
+            if 'weather' in weather and 'temp' in weather:
+                return weather['weather'], math.floor(weather['temp'])
+            else:
+                print(f"Weather data missing required fields: {weather}")
+                return "未知", 0
         else:
             # Fallback when weather data is unavailable
             print(f"Weather API returned unexpected response: {res}")
             return "未知", 0
-    except Exception as e:
-        # Handle network errors or JSON parsing errors
+    except (requests.RequestException, ValueError, KeyError) as e:
+        # Handle network errors, JSON parsing errors, or key errors
         print(f"Error fetching weather data: {e}")
         return "未知", 0
 
@@ -37,7 +42,7 @@ def get_words():
             return data['data']['text']
         else:
             return "祝你今天有个好心情！"
-    except Exception as e:
+    except (requests.RequestException, ValueError, KeyError) as e:
         print(f"Error fetching daily words: {e}")
         return "祝你今天有个好心情！"
 
@@ -72,7 +77,7 @@ def send_msg(token_dd, msg, at_all=False):
         res = requests.post(url, data=json.dumps(data), headers=headers, timeout=10)
         print(res.text)
         return res.text
-    except Exception as e:
+    except requests.RequestException as e:
         print(f"Error sending message to DingTalk: {e}")
         return None
 
