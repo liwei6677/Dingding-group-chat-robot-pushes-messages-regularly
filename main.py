@@ -17,8 +17,8 @@ def get_weather():
             weather = res['lives'][0]
             # Validate that required keys exist in weather data
             if 'weather' in weather and 'temperature' in weather:
-                # Temperature in Gaode API is a string, convert to int
-                return weather['weather'], int(weather['temperature'])
+                # Temperature in Gaode API is a string, convert to float then floor
+                return weather['weather'], math.floor(float(weather['temperature']))
             else:
                 print(f"Weather data missing required fields: {weather}")
                 return "未知", 0
