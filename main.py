@@ -8,18 +8,38 @@ import datetime
 
 # 获取天气和温度
 def get_weather():
-    url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
-    res = requests.get(url).json()
-    weather = res['data']['list'][0]
-    return weather['weather'], math.floor(weather['temp'])
+    try:
+        url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
+        res = requests.get(url, timeout=10).json()
+        
+        # Check if the response contains the expected data structure
+        if 'data' in res and 'list' in res['data'] and len(res['data']['list']) > 0:
+            weather = res['data']['list'][0]
+            return weather['weather'], math.floor(weather['temp'])
+        else:
+            # Fallback when weather data is unavailable
+            print(f"Weather API returned unexpected response: {res}")
+            return "未知", 0
+    except Exception as e:
+        # Handle network errors or JSON parsing errors
+        print(f"Error fetching weather data: {e}")
+        return "未知", 0
 
 
 # 每日一句
 def get_words():
-    words = requests.get("https://api.shadiao.pro/chp")
-    if words.status_code != 200:
-        return get_words()
-    return words.json()['data']['text']
+    try:
+        words = requests.get("https://api.shadiao.pro/chp", timeout=10)
+        if words.status_code != 200:
+            return "祝你今天有个好心情！"
+        data = words.json()
+        if 'data' in data and 'text' in data['data']:
+            return data['data']['text']
+        else:
+            return "祝你今天有个好心情！"
+    except Exception as e:
+        print(f"Error fetching daily words: {e}")
+        return "祝你今天有个好心情！"
 
 
 # 字体随机颜色
@@ -35,23 +55,26 @@ def send_msg(token_dd, msg, at_all=False):
     @param at_all:
     @return:
     """
-    url = 'https://oapi.dingtalk.com/robot/send?access_token=' + token_dd
-    headers = {'Content-Type': 'application/json;charset=utf-8'}
-    content_str = "早上好！\n\n{0}\n".format(msg)
+    try:
+        url = 'https://oapi.dingtalk.com/robot/send?access_token=' + token_dd
+        headers = {'Content-Type': 'application/json;charset=utf-8'}
+        content_str = "早上好！\n\n{0}\n".format(msg)
 
-    data = {
-        "msgtype": "text",
-        "text": {
-            "content": content_str
-        },
-        "at": {
-            "isAtAll": at_all
-        },
-    }
-    res = requests.post(url, data=json.dumps(data), headers=headers)
-    print(res.text)
-
-    return res.text
+        data = {
+            "msgtype": "text",
+            "text": {
+                "content": content_str
+            },
+            "at": {
+                "isAtAll": at_all
+            },
+        }
+        res = requests.post(url, data=json.dumps(data), headers=headers, timeout=10)
+        print(res.text)
+        return res.text
+    except Exception as e:
+        print(f"Error sending message to DingTalk: {e}")
+        return None
 
 
 if __name__ == '__main__':
