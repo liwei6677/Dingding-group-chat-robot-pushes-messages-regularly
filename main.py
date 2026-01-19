@@ -49,9 +49,13 @@ def get_weather():
         # 处理网络请求异常（包括超时）
         print(f"Error fetching weather data: {e}")
         return "未知", 0
-    except (ValueError, KeyError, Exception) as e:
+    except (ValueError, KeyError) as e:
         # 处理数据解析异常
         print(f"Error parsing weather data: {e}")
+        return "未知", 0
+    except Exception as e:
+        # 处理其他异常
+        print(f"Unexpected error in get_weather: {e}")
         return "未知", 0
 
 
