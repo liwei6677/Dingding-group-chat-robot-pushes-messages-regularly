@@ -6,39 +6,45 @@ import requests
 import datetime
 
 
-# 获取天气和温度
+# 获取天气和温度 - 使用高德地图API
 def get_weather():
-    try:
-        url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
-        res = requests.get(url, timeout=10).json()
-        
-        # Check for Gaode API format (lives array)
-        if 'lives' in res and len(res['lives']) > 0:
-            weather = res['lives'][0]
-            # Validate that required keys exist in weather data
-            if 'weather' in weather and 'temperature' in weather:
-                # Temperature in Gaode API is a string, convert to float then floor
-                return weather['weather'], math.floor(float(weather['temperature']))
-            else:
-                print(f"Weather data missing required fields: {weather}")
-                return "未知", 0
-        # Check for original API format (data.list array)
-        elif 'data' in res and 'list' in res['data'] and len(res['data']['list']) > 0:
-            weather = res['data']['list'][0]
-            # Validate that required keys exist in weather data
-            if 'weather' in weather and 'temp' in weather:
-                return weather['weather'], math.floor(weather['temp'])
-            else:
-                print(f"Weather data missing required fields: {weather}")
-                return "未知", 0
-        else:
-            # Fallback when weather data is unavailable
-            print(f"Weather API returned unexpected response: {res}")
-            return "未知", 0
-    except (requests.RequestException, ValueError) as e:
-        # Handle network errors or JSON parsing errors
-        print(f"Error fetching weather data: {e}")
-        return "未知", 0
+    # 高德地图天气API
+    # 文档: https://lbs.amap.com/api/webservice/guide/api/weatherinfo
+    amap_key = os.environ.get('AMAP_KEY')
+    if not amap_key:
+        raise ValueError("AMAP_KEY environment variable is not set")
+    
+    city = os.environ.get('CITY')
+    if not city:
+        raise ValueError("CITY environment variable is not set")
+    
+    url = "https://restapi.amap.com/v3/weather/weatherInfo"
+    params = {
+        'key': amap_key,
+        'city': city,
+        'extensions': 'base'  # base: 实时天气, all: 预报天气
+    }
+    
+    res = requests.get(url, params=params, timeout=10)
+    res.raise_for_status()  # 抛出HTTP错误
+    data = res.json()
+    
+    # 检查API返回状态
+    if data.get('status') != '1':
+        raise Exception(f"高德地图API错误: {data.get('info', 'Unknown error')}")
+    
+    # 获取实时天气信息
+    lives = data.get('lives', [])
+    if not lives:
+        raise Exception("未获取到天气数据")
+    
+    weather_data = lives[0]
+    weather = weather_data.get('weather', '未知')
+    temperature = weather_data.get('temperature', '0')
+    
+    # 返回天气和温度（转为整数）
+    return weather, int(float(temperature))
+
 
 
 # 每日一句
@@ -93,8 +99,14 @@ def send_msg(token_dd, msg, at_all=False):
 
 
 if __name__ == '__main__':
-    city = os.environ['CITY']
-    token_dd = os.environ['TOKEN_DD']
+    city = os.environ.get('CITY')
+    token_dd = os.environ.get('TOKEN_DD')
+    
+    if not city:
+        raise ValueError("CITY environment variable is not set")
+    if not token_dd:
+        raise ValueError("TOKEN_DD environment variable is not set")
+    
     # city = "北京"
     # token_dd = '你自己的webhook后面的access_token复制在此'
     wea, temperature = get_weather()
