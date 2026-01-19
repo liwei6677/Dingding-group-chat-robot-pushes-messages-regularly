@@ -25,8 +25,8 @@ def get_weather():
             # Fallback when weather data is unavailable
             print(f"Weather API returned unexpected response: {res}")
             return "未知", 0
-    except (requests.RequestException, ValueError, KeyError) as e:
-        # Handle network errors, JSON parsing errors, or key errors
+    except (requests.RequestException, ValueError) as e:
+        # Handle network errors or JSON parsing errors
         print(f"Error fetching weather data: {e}")
         return "未知", 0
 
@@ -42,7 +42,7 @@ def get_words():
             return data['data']['text']
         else:
             return "祝你今天有个好心情！"
-    except (requests.RequestException, ValueError, KeyError) as e:
+    except (requests.RequestException, ValueError) as e:
         print(f"Error fetching daily words: {e}")
         return "祝你今天有个好心情！"
 
