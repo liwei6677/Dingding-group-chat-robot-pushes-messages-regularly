@@ -6,12 +6,43 @@ import requests
 import datetime
 
 
-# 获取天气和温度
+# 获取天气和温度 - 使用高德地图API
 def get_weather():
-    url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
-    res = requests.get(url).json()
-    weather = res['data']['list'][0]
-    return weather['weather'], math.floor(weather['temp'])
+    # 高德地图天气API
+    # 文档: https://lbs.amap.com/api/webservice/guide/api/weatherinfo
+    amap_key = os.environ.get('AMAP_KEY')
+    if not amap_key:
+        raise ValueError("AMAP_KEY environment variable is not set")
+    
+    city = os.environ.get('CITY')
+    if not city:
+        raise ValueError("CITY environment variable is not set")
+    
+    url = "https://restapi.amap.com/v3/weather/weatherInfo"
+    params = {
+        'key': amap_key,
+        'city': city,
+        'extensions': 'base'  # base: 实时天气, all: 预报天气
+    }
+    
+    res = requests.get(url, params=params)
+    data = res.json()
+    
+    # 检查API返回状态
+    if data.get('status') != '1':
+        raise Exception(f"高德地图API错误: {data.get('info', 'Unknown error')}")
+    
+    # 获取实时天气信息
+    lives = data.get('lives', [])
+    if not lives:
+        raise Exception("未获取到天气数据")
+    
+    weather_data = lives[0]
+    weather = weather_data.get('weather', '未知')
+    temperature = weather_data.get('temperature', '0')
+    
+    # 返回天气和温度（转为整数）
+    return weather, int(float(temperature))
 
 
 # 每日一句
