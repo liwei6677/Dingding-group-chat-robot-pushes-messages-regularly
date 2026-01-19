@@ -12,8 +12,18 @@ def get_weather():
         url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
         res = requests.get(url, timeout=10).json()
         
-        # Check if the response contains the expected data structure
-        if 'data' in res and 'list' in res['data'] and len(res['data']['list']) > 0:
+        # Check for Gaode API format (lives array)
+        if 'lives' in res and len(res['lives']) > 0:
+            weather = res['lives'][0]
+            # Validate that required keys exist in weather data
+            if 'weather' in weather and 'temperature' in weather:
+                # Temperature in Gaode API is a string, convert to int
+                return weather['weather'], int(weather['temperature'])
+            else:
+                print(f"Weather data missing required fields: {weather}")
+                return "未知", 0
+        # Check for original API format (data.list array)
+        elif 'data' in res and 'list' in res['data'] and len(res['data']['list']) > 0:
             weather = res['data']['list'][0]
             # Validate that required keys exist in weather data
             if 'weather' in weather and 'temp' in weather:
