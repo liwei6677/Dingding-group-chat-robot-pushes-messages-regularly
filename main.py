@@ -25,25 +25,34 @@ def get_weather():
         'extensions': 'base'  # base: 实时天气, all: 预报天气
     }
     
-    res = requests.get(url, params=params, timeout=10)
-    res.raise_for_status()  # 抛出HTTP错误
-    data = res.json()
-    
-    # 检查API返回状态
-    if data.get('status') != '1':
-        raise Exception(f"高德地图API错误: {data.get('info', 'Unknown error')}")
-    
-    # 获取实时天气信息
-    lives = data.get('lives', [])
-    if not lives:
-        raise Exception("未获取到天气数据")
-    
-    weather_data = lives[0]
-    weather = weather_data.get('weather', '未知')
-    temperature = weather_data.get('temperature', '0')
-    
-    # 返回天气和温度（转为整数）
-    return weather, int(float(temperature))
+    try:
+        res = requests.get(url, params=params, timeout=10)
+        res.raise_for_status()  # 抛出HTTP错误
+        data = res.json()
+        
+        # 检查API返回状态
+        if data.get('status') != '1':
+            raise Exception(f"高德地图API错误: {data.get('info', 'Unknown error')}")
+        
+        # 获取实时天气信息
+        lives = data.get('lives', [])
+        if not lives:
+            raise Exception("未获取到天气数据")
+        
+        weather_data = lives[0]
+        weather = weather_data.get('weather', '未知')
+        temperature = weather_data.get('temperature', '0')
+        
+        # 返回天气和温度（转为整数）
+        return weather, int(float(temperature))
+    except requests.RequestException as e:
+        # 处理网络请求异常（包括超时）
+        print(f"Error fetching weather data: {e}")
+        return "未知", 0
+    except (ValueError, KeyError, Exception) as e:
+        # 处理数据解析异常
+        print(f"Error parsing weather data: {e}")
+        return "未知", 0
 
 
 
