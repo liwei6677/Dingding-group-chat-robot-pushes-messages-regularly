@@ -1,18 +1,18 @@
 # 钉钉群聊机器人定时推送消息
 
-![GitHub repo size](https://img.shields.io/github/repo-size/QInzhengk/galaxy?style=for-the-badge)
-![GitHub stars](https://img.shields.io/github/stars/QInzhengk/galaxy?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/QInzhengk/galaxy?style=for-the-badge)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/QInzhengk/galaxy?style=for-the-badge)
-![Bitbucket  issues](https://img.shields.io/github/issues-closed/QInzhengk/galaxy?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly?style=for-the-badge)
+![GitHub stars](https://img.shields.io/github/stars/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly?style=for-the-badge)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly?style=for-the-badge)
+![Bitbucket  issues](https://img.shields.io/github/issues-closed/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly?style=for-the-badge)
 
 ## 📒 简介
 
 > :smiley: 通过GitHub Actions给钉钉群聊定时推送消息（Python）。
 
-## 🤝 [博客](https://github.com/qzkq/qzkq.github.io)
+## 🤝 项目地址
 
-[galaxy](https://qzkq.github.io/)
+[GitHub Repository](https://github.com/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly)
 
 ## 实例2、通过GitHub Actions给钉钉群聊机器人定时推送消息（Python）
 ### 1、钉钉步骤
@@ -230,28 +230,34 @@ FeedCard的消息类型，具体代码如下：
 
 
 ### 2、Github步骤
-这里和第一个实例类似，不再重复介绍。
-代码地址：[https://github.com/QInzhengk/galaxy](https://github.com/QInzhengk/galaxy)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/1d1ac2ec331a46d08c4473e152101732.png)
 
-### 3、配置说明
+#### 配置GitHub Actions
 
-需要在 GitHub 仓库的 Settings -> Secrets and variables -> Actions 中配置以下密钥：
+1. Fork或克隆本项目到你的GitHub账户
+2. 在你的仓库中进入 `Settings` -> `Secrets and variables` -> `Actions`
+3. 添加以下Secrets：
+   - `TOKEN_DD`: 你的钉钉机器人Webhook中的access_token
+   - `CITY`: 你所在的城市名称（如：北京、上海、广州等）
 
-1. **TOKEN_DD**: 钉钉机器人的 Webhook 中的 access_token 值
-2. **CITY**: 城市名称或城市编码（如：北京、110000）
-3. **AMAP_KEY**: 高德地图API密钥
+#### 配置定时任务
 
-#### 如何获取高德地图API密钥：
+在 `.github/workflows/main.yml` 文件中，可以修改定时任务的执行时间：
 
-1. 访问[高德开放平台](https://lbs.amap.com/)
-2. 注册并登录账号
-3. 进入控制台，创建应用
-4. 在应用中添加 Key，服务平台选择"Web服务"
-5. 将获得的 Key 配置到 GitHub Secrets 的 AMAP_KEY 中
+```yaml
+schedule:
+  # UTC 时间的零点，北京时间的八点
+  - cron: '0 0 * * *'
+```
 
-**注意**: 高德地图 API 提供的天气信息需要使用城市编码（adcode）或城市中文名。具体支持的城市列表可参考[高德地图城市编码表](https://lbs.amap.com/api/webservice/download)。
+#### 手动触发
 
+除了定时执行，你也可以在 GitHub Actions 页面手动触发工作流：
+1. 进入你的仓库
+2. 点击 `Actions` 标签
+3. 选择 `morning` 工作流
+4. 点击 `Run workflow` 按钮
+
+代码地址：[https://github.com/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly](https://github.com/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly)
 ## ☕  鸣谢
 
 感谢以下参考的帮助：
