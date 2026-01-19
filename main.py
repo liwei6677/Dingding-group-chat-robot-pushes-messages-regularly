@@ -25,7 +25,8 @@ def get_weather():
         'extensions': 'base'  # base: 实时天气, all: 预报天气
     }
     
-    res = requests.get(url, params=params)
+    res = requests.get(url, params=params, timeout=10)
+    res.raise_for_status()  # 抛出HTTP错误
     data = res.json()
     
     # 检查API返回状态
@@ -86,8 +87,14 @@ def send_msg(token_dd, msg, at_all=False):
 
 
 if __name__ == '__main__':
-    city = os.environ['CITY']
-    token_dd = os.environ['TOKEN_DD']
+    city = os.environ.get('CITY')
+    token_dd = os.environ.get('TOKEN_DD')
+    
+    if not city:
+        raise ValueError("CITY environment variable is not set")
+    if not token_dd:
+        raise ValueError("TOKEN_DD environment variable is not set")
+    
     # city = "北京"
     # token_dd = '你自己的webhook后面的access_token复制在此'
     wea, temperature = get_weather()
