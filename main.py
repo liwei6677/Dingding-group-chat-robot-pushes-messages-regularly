@@ -46,12 +46,21 @@ def get_weather():
     return weather, int(float(temperature))
 
 
+
 # 每日一句
 def get_words():
-    words = requests.get("https://api.shadiao.pro/chp")
-    if words.status_code != 200:
-        return get_words()
-    return words.json()['data']['text']
+    try:
+        words = requests.get("https://api.shadiao.pro/chp", timeout=10)
+        if words.status_code != 200:
+            return "祝你今天有个好心情！"
+        data = words.json()
+        if 'data' in data and 'text' in data['data']:
+            return data['data']['text']
+        else:
+            return "祝你今天有个好心情！"
+    except (requests.RequestException, ValueError) as e:
+        print(f"Error fetching daily words: {e}")
+        return "祝你今天有个好心情！"
 
 
 # 字体随机颜色
@@ -67,23 +76,26 @@ def send_msg(token_dd, msg, at_all=False):
     @param at_all:
     @return:
     """
-    url = 'https://oapi.dingtalk.com/robot/send?access_token=' + token_dd
-    headers = {'Content-Type': 'application/json;charset=utf-8'}
-    content_str = "早上好！\n\n{0}\n".format(msg)
+    try:
+        url = 'https://oapi.dingtalk.com/robot/send?access_token=' + token_dd
+        headers = {'Content-Type': 'application/json;charset=utf-8'}
+        content_str = "早上好！\n\n{0}\n".format(msg)
 
-    data = {
-        "msgtype": "text",
-        "text": {
-            "content": content_str
-        },
-        "at": {
-            "isAtAll": at_all
-        },
-    }
-    res = requests.post(url, data=json.dumps(data), headers=headers)
-    print(res.text)
-
-    return res.text
+        data = {
+            "msgtype": "text",
+            "text": {
+                "content": content_str
+            },
+            "at": {
+                "isAtAll": at_all
+            },
+        }
+        res = requests.post(url, data=json.dumps(data), headers=headers, timeout=10)
+        print(res.text)
+        return res.text
+    except requests.RequestException as e:
+        print(f"Error sending message to DingTalk: {e}")
+        return None
 
 
 if __name__ == '__main__':
