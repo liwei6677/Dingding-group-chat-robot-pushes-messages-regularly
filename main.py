@@ -40,23 +40,67 @@ def get_weather():
             raise Exception("未获取到天气数据")
         
         weather_data = lives[0]
+        
+        # 提取更多天气信息
+        city_name = weather_data.get('city', '未知')
+        province = weather_data.get('province', '')
         weather = weather_data.get('weather', '未知')
         temperature = weather_data.get('temperature', '0')
+        wind_direction = weather_data.get('winddirection', '未知')
+        wind_power = weather_data.get('windpower', '未知')
+        humidity = weather_data.get('humidity', '未知')
+        report_time = weather_data.get('reporttime', '')
         
-        # 返回天气和温度（转为整数）
-        return weather, int(float(temperature))
+        # 返回天气详细信息字典
+        return {
+            'city_name': city_name,
+            'province': province,
+            'weather': weather,
+            'temperature': int(float(temperature)),
+            'wind_direction': wind_direction,
+            'wind_power': wind_power,
+            'humidity': humidity,
+            'report_time': report_time
+        }
     except requests.RequestException as e:
         # 处理网络请求异常（包括超时）
         print(f"Error fetching weather data: {e}")
-        return "未知", 0
+        return {
+            'city_name': '未知',
+            'province': '',
+            'weather': '未知',
+            'temperature': 0,
+            'wind_direction': '未知',
+            'wind_power': '未知',
+            'humidity': '未知',
+            'report_time': ''
+        }
     except (ValueError, KeyError) as e:
         # 处理数据解析异常
         print(f"Error parsing weather data: {e}")
-        return "未知", 0
+        return {
+            'city_name': '未知',
+            'province': '',
+            'weather': '未知',
+            'temperature': 0,
+            'wind_direction': '未知',
+            'wind_power': '未知',
+            'humidity': '未知',
+            'report_time': ''
+        }
     except Exception as e:
         # 处理其他异常
         print(f"Unexpected error in get_weather: {e}")
-        return "未知", 0
+        return {
+            'city_name': '未知',
+            'province': '',
+            'weather': '未知',
+            'temperature': 0,
+            'wind_direction': '未知',
+            'wind_power': '未知',
+            'humidity': '未知',
+            'report_time': ''
+        }
 
 
 
@@ -122,8 +166,17 @@ if __name__ == '__main__':
     
     # city = "北京"
     # token_dd = '你自己的webhook后面的access_token复制在此'
-    wea, temperature = get_weather()
+    weather_info = get_weather()
 
-    note_str = "当前城市：{0}\n今日天气：{1}\n当前温度：{2}\n{3}".format(city, wea, temperature, get_words())
+    # 构建更详细的天气信息
+    note_str = "📍 当前城市：{city}\n☁️ 今日天气：{weather}\n🌡️ 当前温度：{temp}℃\n💨 风向风力：{wind_dir} {wind_power}级\n💧 空气湿度：{humidity}%\n\n{words}".format(
+        city=weather_info['city_name'],
+        weather=weather_info['weather'],
+        temp=weather_info['temperature'],
+        wind_dir=weather_info['wind_direction'],
+        wind_power=weather_info['wind_power'],
+        humidity=weather_info['humidity'],
+        words=get_words()
+    )
 
     send_msg(token_dd, note_str, True)
