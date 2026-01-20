@@ -156,12 +156,22 @@ if __name__ == '__main__':
     weather_info = get_weather()
 
     # 构建更详细的天气信息
+    # 处理风力显示（高德API返回格式如"≤3"，不包含"级"字符）
+    wind_power_display = weather_info['wind_power']
+    if wind_power_display and not wind_power_display.endswith('级'):
+        wind_power_display = f"{wind_power_display}级"
+    
+    # 处理湿度显示（高德API返回数字字符串如"75"）
+    humidity_display = weather_info['humidity']
+    if humidity_display and humidity_display != '未知' and not humidity_display.endswith('%'):
+        humidity_display = f"{humidity_display}%"
+    
     note_str = (
         f"📍 当前城市：{weather_info['city_name']}\n"
         f"☁️ 今日天气：{weather_info['weather']}\n"
         f"🌡️ 当前温度：{weather_info['temperature']}℃\n"
-        f"💨 风向风力：{weather_info['wind_direction']} {weather_info['wind_power']}\n"
-        f"💧 空气湿度：{weather_info['humidity']}%\n"
+        f"💨 风向风力：{weather_info['wind_direction']} {wind_power_display}\n"
+        f"💧 空气湿度：{humidity_display}\n"
         f"\n{get_words()}"
     )
 
