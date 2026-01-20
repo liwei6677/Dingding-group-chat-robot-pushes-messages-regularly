@@ -71,7 +71,7 @@ def get_weather():
                 'city_name': city_name,
                 'province': province,
                 'weather': weather,
-                'temperature': int(float(temperature)),
+                'temperature': round(float(temperature)),
                 'wind_direction': wind_direction,
                 'wind_power': wind_power,
                 'humidity': humidity,
