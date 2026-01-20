@@ -6,6 +6,20 @@ import requests
 import datetime
 
 
+def _get_default_weather_info():
+    """返回默认的天气信息（当API调用失败时使用）"""
+    return {
+        'city_name': '未知',
+        'province': '',
+        'weather': '未知',
+        'temperature': 0,
+        'wind_direction': '未知',
+        'wind_power': '未知',
+        'humidity': '未知',
+        'report_time': ''
+    }
+
+
 # 获取天气和温度 - 使用高德地图API
 def get_weather():
     # 高德地图天气API
@@ -65,42 +79,15 @@ def get_weather():
     except requests.RequestException as e:
         # 处理网络请求异常（包括超时）
         print(f"Error fetching weather data: {e}")
-        return {
-            'city_name': '未知',
-            'province': '',
-            'weather': '未知',
-            'temperature': 0,
-            'wind_direction': '未知',
-            'wind_power': '未知',
-            'humidity': '未知',
-            'report_time': ''
-        }
+        return _get_default_weather_info()
     except (ValueError, KeyError) as e:
         # 处理数据解析异常
         print(f"Error parsing weather data: {e}")
-        return {
-            'city_name': '未知',
-            'province': '',
-            'weather': '未知',
-            'temperature': 0,
-            'wind_direction': '未知',
-            'wind_power': '未知',
-            'humidity': '未知',
-            'report_time': ''
-        }
+        return _get_default_weather_info()
     except Exception as e:
         # 处理其他异常
         print(f"Unexpected error in get_weather: {e}")
-        return {
-            'city_name': '未知',
-            'province': '',
-            'weather': '未知',
-            'temperature': 0,
-            'wind_direction': '未知',
-            'wind_power': '未知',
-            'humidity': '未知',
-            'report_time': ''
-        }
+        return _get_default_weather_info()
 
 
 
@@ -169,14 +156,13 @@ if __name__ == '__main__':
     weather_info = get_weather()
 
     # 构建更详细的天气信息
-    note_str = "📍 当前城市：{city}\n☁️ 今日天气：{weather}\n🌡️ 当前温度：{temp}℃\n💨 风向风力：{wind_dir} {wind_power}级\n💧 空气湿度：{humidity}%\n\n{words}".format(
-        city=weather_info['city_name'],
-        weather=weather_info['weather'],
-        temp=weather_info['temperature'],
-        wind_dir=weather_info['wind_direction'],
-        wind_power=weather_info['wind_power'],
-        humidity=weather_info['humidity'],
-        words=get_words()
+    note_str = (
+        f"📍 当前城市：{weather_info['city_name']}\n"
+        f"☁️ 今日天气：{weather_info['weather']}\n"
+        f"🌡️ 当前温度：{weather_info['temperature']}℃\n"
+        f"💨 风向风力：{weather_info['wind_direction']} {weather_info['wind_power']}\n"
+        f"💧 空气湿度：{weather_info['humidity']}%\n"
+        f"\n{get_words()}"
     )
 
     send_msg(token_dd, note_str, True)
