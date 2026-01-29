@@ -12,11 +12,11 @@ def _get_default_weather_info():
         'city_name': '未知',
         'province': '',
         'weather': '未知',
-        'temperature': 0,
+        'temperature_high': 0,
+        'temperature_low': 0,
         'wind_direction': '未知',
         'wind_power': '未知',
-        'humidity': '未知',
-        'report_time': ''
+        'date': ''
     }
 
 
@@ -37,7 +37,7 @@ def get_weather():
     params = {
         'key': amap_key,
         'city': city,
-        'extensions': 'base'  # base: 实时天气, all: 预报天气
+        'extensions': 'all'  # base: 实时天气, all: 预报天气
     }
     
     try:
@@ -49,33 +49,43 @@ def get_weather():
         if data.get('status') != '1':
             raise Exception(f"高德地图API错误: {data.get('info', 'Unknown error')}")
         
-        # 获取实时天气信息列表
-        lives = data.get('lives', [])
-        if not lives:
+        # 获取天气预报信息列表
+        forecasts = data.get('forecasts', [])
+        if not forecasts:
             raise Exception("未获取到天气数据")
         
         # 处理所有城市的天气数据
         weather_list = []
-        for weather_data in lives:
+        for forecast_data in forecasts:
+            # 获取城市信息
+            city_name = forecast_data.get('city', '未知')
+            province = forecast_data.get('province', '')
+            
+            # 获取预报天气信息
+            casts = forecast_data.get('casts', [])
+            if not casts or len(casts) < 2:
+                raise Exception("未获取到明天的天气预报数据")
+            
+            # 获取明天的天气（索引1是明天，索引0是今天）
+            tomorrow_weather = casts[1]
+            
             # 提取天气信息
-            city_name = weather_data.get('city', '未知')
-            province = weather_data.get('province', '')
-            weather = weather_data.get('weather', '未知')
-            temperature = weather_data.get('temperature', '0')
-            wind_direction = weather_data.get('winddirection', '未知')
-            wind_power = weather_data.get('windpower', '未知')
-            humidity = weather_data.get('humidity', '未知')
-            report_time = weather_data.get('reporttime', '')
+            weather = tomorrow_weather.get('dayweather', '未知')
+            temperature_high = tomorrow_weather.get('daytemp', '0')
+            temperature_low = tomorrow_weather.get('nighttemp', '0')
+            wind_direction = tomorrow_weather.get('daywind', '未知')
+            wind_power = tomorrow_weather.get('daypower', '未知')
+            date = tomorrow_weather.get('date', '')
             
             weather_list.append({
                 'city_name': city_name,
                 'province': province,
                 'weather': weather,
-                'temperature': round(float(temperature)),
+                'temperature_high': round(float(temperature_high)),
+                'temperature_low': round(float(temperature_low)),
                 'wind_direction': wind_direction,
                 'wind_power': wind_power,
-                'humidity': humidity,
-                'report_time': report_time
+                'date': date
             })
         
         # 返回所有城市的天气信息列表
@@ -144,7 +154,7 @@ def send_msg(token_dd, title, msg, at_all=False, msg_type="markdown"):
             }
         else:
             # 使用text格式
-            content_str = "早上好！\n\n{0}\n".format(msg)
+            content_str = "晚上好！\n\n{0}\n".format(msg)
             data = {
                 "msgtype": "text",
                 "text": {
@@ -182,12 +192,12 @@ if __name__ == '__main__':
     # 构建markdown格式的天气信息
     # 标题
     if len(weather_list) == 1:
-        title = f"早安，{weather_list[0]['city_name']}天气播报"
+        title = f"晚安，{weather_list[0]['city_name']}明日天气播报"
     else:
-        title = f"早安，{len(weather_list)}个城市天气播报"
+        title = f"晚安，{len(weather_list)}个城市明日天气播报"
     
     # 正文内容（使用markdown格式）
-    markdown_text = "## 早上好！ 🌅\n\n"
+    markdown_text = "## 晚上好！ 🌙\n\n"
     
     # 遍历所有城市的天气信息
     for idx, weather_info in enumerate(weather_list, 1):
@@ -196,26 +206,20 @@ if __name__ == '__main__':
         if wind_power_display and not wind_power_display.endswith('级'):
             wind_power_display = f"{wind_power_display}级"
         
-        # 处理湿度显示
-        humidity_display = weather_info['humidity']
-        if humidity_display and humidity_display != '未知' and not humidity_display.endswith('%'):
-            humidity_display = f"{humidity_display}%"
-        
         # 如果有多个城市，添加序号和分隔
         if len(weather_list) > 1:
             markdown_text += f"### {idx}. {weather_info['city_name']} \n\n"
         else:
             markdown_text += f"### 📍 {weather_info['city_name']} \n\n"
         
+        # 如果有日期信息，显示
+        if weather_info['date']:
+            markdown_text += f"> 📅 **日期**：{weather_info['date']} \n\n"
+        
         # 天气详情
         markdown_text += f"> ☁️ **天气**：{weather_info['weather']} \n\n"
-        markdown_text += f"> 🌡️ **温度**：{weather_info['temperature']}℃ \n\n"
+        markdown_text += f"> 🌡️ **温度**：{weather_info['temperature_low']}℃ ~ {weather_info['temperature_high']}℃ \n\n"
         markdown_text += f"> 💨 **风向风力**：{weather_info['wind_direction']} {wind_power_display} \n\n"
-        markdown_text += f"> 💧 **空气湿度**：{humidity_display} \n\n"
-        
-        # 如果有上报时间，显示
-        if weather_info['report_time']:
-            markdown_text += f"> 🕐 **更新时间**：{weather_info['report_time']} \n\n"
         
         # 如果是多个城市，添加分隔线
         if len(weather_list) > 1 and idx < len(weather_list):
