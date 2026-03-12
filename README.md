@@ -43,7 +43,7 @@ Enter the robot management page, click Add Robot, enter the robot selection page
 ![Add Robot](https://img-blog.csdnimg.cn/16042ba005e94ae480a83dd9c65ea220.png)
 
 #### 1.3 Configure Robot
-You need to modify the robot's avatar and name. In the security settings, **it is recommended to check the custom keyword option**, for example, set the keyword as: **Good evening**, then you can keep other settings as default. After clicking complete, you will see a webhook on the new page.
+You need to modify the robot's avatar and name. In the security settings, **it is recommended to check the custom keyword option**, for example, set the keyword as: **Good night**, then you can keep other settings as default. After clicking complete, you will see a webhook on the new page.
 
 ![Configure Robot](https://img-blog.csdnimg.cn/d03d721b6c20482d8b6517af8ec284a3.png)
 
@@ -120,8 +120,8 @@ In addition to scheduled execution, you can also manually trigger the workflow f
 
 The program sends Markdown formatted messages to the DingTalk group, containing the following:
 
-- 🌅 Good evening greeting
-- 📍 City weather information (supports multiple cities)
+- 🌙 Good evening greeting
+- 📍 Tomorrow's weather forecast for cities (supports multiple cities)
   - ☁️ Weather conditions
   - 🌡️ Real-time temperature
   - 💨 Wind direction and force
