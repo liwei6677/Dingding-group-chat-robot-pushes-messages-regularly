@@ -1,6 +1,6 @@
 # DingTalk グループチャットロボット - スケジュールメッセージプッシュ
 
-**Language/语言**: [English](README_EN.md) | [日本語](README_JP.md) | [中文](README.md)
+**Language/语言**: [English](README.md) | [日本語](README_JP.md) | [中文](README_CN.md)
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly?style=for-the-badge)
 ![GitHub stars](https://img.shields.io/github/stars/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly?style=for-the-badge)
@@ -427,7 +427,7 @@ Markdown 形式を使用してメッセージを送信し、サポート：
 
 ## 📄 ライセンス
 
-このプロジェクトは学習と交流の目的でのみ使用してください。商業目的で使用しないでください。
+このプロジェクトは MIT ライセンスの下でライセンスされています - 詳細については [LICENSE](LICENSE) ファイルを参照してください。
 
 ---
 
