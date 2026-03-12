@@ -1,6 +1,6 @@
-# 钉钉群聊机器人定时推送消息
+# DingTalk Group Chat Robot - Scheduled Message Push
 
-**Language/语言**: [English](README_EN.md) | [日本語](README_JP.md) | [中文](README.md)
+**Language/语言**: [English](README.md) | [日本語](README_JP.md) | [中文](README_CN.md)
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly?style=for-the-badge)
 ![GitHub stars](https://img.shields.io/github/stars/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly?style=for-the-badge)
@@ -8,147 +8,147 @@
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly?style=for-the-badge)
 ![Bitbucket  issues](https://img.shields.io/github/issues-closed/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly?style=for-the-badge)
 
-## 📒 简介
+## 📒 Introduction
 
-> :smiley: 通过GitHub Actions给钉钉群聊定时推送消息（Python）。
+> :smiley: Push scheduled messages to DingTalk group chats using GitHub Actions (Python).
 
-### ✨ 主要特性
+### ✨ Main Features
 
-- 🤖 基于钉钉自定义机器人的消息推送
-- ⏰ 使用GitHub Actions实现定时任务，无需自建服务器
-- 🌤️ 集成高德地图天气API，支持多个城市天气查询
-- 📝 支持Markdown格式的消息展示，排版美观
-- 💬 每日一句名言/鸡汤推送
-- 🔄 完善的错误处理和降级机制
-- 🆓 完全免费，无需付费资源
+- 🤖 Message push based on DingTalk custom robots
+- ⏰ Scheduled tasks using GitHub Actions, no server required
+- 🌤️ Integration with AMAP (AutoNavi) Weather API, supports multiple cities
+- 📝 Supports Markdown formatted messages with beautiful layout
+- 💬 Daily quotes/inspirational messages
+- 🔄 Complete error handling and fallback mechanisms
+- 🆓 Completely free, no paid resources required
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 准备工作
+### Prerequisites
 
-在开始之前，您需要准备：
+Before starting, you need to prepare:
 
-1. 一个钉钉账号和一个钉钉群聊
-2. 一个GitHub账号
-3. 高德地图API密钥（免费申请）
+1. A DingTalk account and a DingTalk group chat
+2. A GitHub account
+3. AMAP API key (free application)
 
-### 步骤一：配置钉钉机器人
+### Step 1: Configure DingTalk Robot
 
-#### 1.1 创建钉钉群聊
-打开钉钉，点击+发起群聊（如你有公司，需要有两个不是公司的好友才能创建普通群），创建完成后，打开群聊中的设置，智能群助手。
+#### 1.1 Create DingTalk Group Chat
+Open DingTalk, click + to start a group chat (if you have a company account, you need two non-company friends to create a normal group). After creation, open the group chat settings and go to Smart Group Assistant.
 
-#### 1.2 添加自定义机器人
-进入到机器人管理页面，点击添加机器人，进入机器人选择页面，这里选择自定义机器人。
+#### 1.2 Add Custom Robot
+Enter the robot management page, click Add Robot, enter the robot selection page, and select Custom Robot.
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/16042ba005e94ae480a83dd9c65ea220.png)
+![Add Robot](https://img-blog.csdnimg.cn/16042ba005e94ae480a83dd9c65ea220.png)
 
-#### 1.3 配置机器人
-需要给机器人修改头像和名称，在安全设置里面，**建议最好把自定义关键字也勾选上**，比如设置关键字为：**早上好**，然后其他的可以默认，点击完成后在新的页面有一个webhook
+#### 1.3 Configure Robot
+You need to modify the robot's avatar and name. In the security settings, **it is recommended to check the custom keyword option**, for example, set the keyword as: **Good night**, then you can keep other settings as default. After clicking complete, you will see a webhook on the new page.
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/d03d721b6c20482d8b6517af8ec284a3.png)
+![Configure Robot](https://img-blog.csdnimg.cn/d03d721b6c20482d8b6517af8ec284a3.png)
 
-#### 1.4 保存Webhook地址
-获取到Webhook地址后，用户可以向这个地址发起HTTP POST 请求，即可实现给该钉钉群发送消息。
+#### 1.4 Save Webhook Address
+After obtaining the Webhook address, you can send HTTP POST requests to this address to send messages to the DingTalk group.
 
-**⚠️ 重要提示：**
-- Webhook地址包含access_token，请妥善保管，不要泄露在网上
-- 每个机器人每分钟最多发送20条消息
-- 必须将字符集编码设置成UTF-8
+**⚠️ Important Notes:**
+- The Webhook address contains access_token, please keep it safe and do not leak it online
+- Each robot can send up to 20 messages per minute
+- Character encoding must be set to UTF-8
 
-### 步骤二：申请高德地图API密钥
+### Step 2: Apply for AMAP API Key
 
-#### 2.1 注册高德开放平台账号
-访问 [高德开放平台](https://lbs.amap.com/)，注册并登录账号。
+#### 2.1 Register AMAP Open Platform Account
+Visit [AMAP Open Platform](https://lbs.amap.com/), register and login.
 
-#### 2.2 创建应用
-1. 进入控制台，点击"应用管理" -> "我的应用"
-2. 点击"创建新应用"，填写应用名称和类型
-3. 在应用下添加Key，选择服务平台为"Web服务"
-4. 保存生成的Key（这就是你的AMAP_KEY）
+#### 2.2 Create Application
+1. Enter the console, click "Application Management" -> "My Applications"
+2. Click "Create New Application", fill in the application name and type
+3. Add a Key under the application, select "Web Service" as the service platform
+4. Save the generated Key (this is your AMAP_KEY)
 
-> 💡 高德地图API每天提供一定的免费调用额度，个人使用完全足够
+> 💡 AMAP API provides a certain amount of free calls per day, which is sufficient for personal use
 
-### 步骤三：配置GitHub Actions
+### Step 3: Configure GitHub Actions
 
-#### 3.1 Fork或克隆本项目
-将本项目Fork到你的GitHub账户，或者克隆后推送到你自己的仓库。
+#### 3.1 Fork or Clone This Project
+Fork this project to your GitHub account, or clone and push to your own repository.
 
-#### 3.2 配置Secrets
-在你的仓库中进入 `Settings` -> `Secrets and variables` -> `Actions`，点击 `New repository secret` 添加以下三个Secrets：
+#### 3.2 Configure Secrets
+In your repository, go to `Settings` -> `Secrets and variables` -> `Actions`, click `New repository secret` to add the following three Secrets:
 
-| Secret名称 | 说明 | 示例 |
+| Secret Name | Description | Example |
 |-----------|------|------|
-| `TOKEN_DD` | 钉钉机器人Webhook中的access_token部分 | `abc123def456...` |
-| `CITY` | 城市名称或城市编码，支持多个城市（用逗号分隔） | `北京` 或 `110000,310000` |
-| `AMAP_KEY` | 高德地图API密钥 | `your_amap_key_here` |
+| `TOKEN_DD` | access_token part from DingTalk robot Webhook | `abc123def456...` |
+| `CITY` | City name or city code, supports multiple cities (separated by commas) | `Beijing` or `110000,310000` |
+| `AMAP_KEY` | AMAP API key | `your_amap_key_here` |
 
-**城市配置说明：**
-- 单个城市：直接填写城市名称，如 `北京`、`上海`、`广州`
-- 多个城市：使用城市编码并用逗号分隔，如 `110000,310000`（北京和上海）
-- 城市编码查询：[高德地图城市编码表](https://lbs.amap.com/api/webservice/guide/api/district)
+**City Configuration Instructions:**
+- Single city: Fill in the city name directly, such as `Beijing`, `Shanghai`, `Guangzhou`
+- Multiple cities: Use city codes separated by commas, such as `110000,310000` (Beijing and Shanghai)
+- City code query: [AMAP City Code Table](https://lbs.amap.com/api/webservice/guide/api/district)
 
-#### 3.3 配置定时任务（可选）
+#### 3.3 Configure Scheduled Tasks (Optional)
 
-在 `.github/workflows/main.yml` 文件中，可以修改定时任务的执行时间：
+In the `.github/workflows/main.yml` file, you can modify the execution time of scheduled tasks:
 
 ```yaml
 schedule:
-  # UTC 时间的零点，对应北京时间的上午8点
+  # UTC time 0:00, corresponding to Beijing time 8:00 AM
   - cron: '0 0 * * *'
 ```
 
-**常用时间配置（cron表达式使用UTC时间）：**
-- `0 0 * * *` - 每天UTC 0:00 = 北京时间8:00
-- `30 0 * * *` - 每天UTC 0:30 = 北京时间8:30
-- `0 1 * * *` - 每天UTC 1:00 = 北京时间9:00
-- `0 0 * * 1-5` - 每周一到周五UTC 0:00 = 北京时间8:00
+**Common Time Configurations (cron expressions use UTC time):**
+- `0 0 * * *` - Daily UTC 0:00 = Beijing time 8:00 AM
+- `30 0 * * *` - Daily UTC 0:30 = Beijing time 8:30 AM
+- `0 1 * * *` - Daily UTC 1:00 = Beijing time 9:00 AM
+- `0 0 * * 1-5` - Monday to Friday UTC 0:00 = Beijing time 8:00 AM
 
-> ⚠️ 注意：
-> - GitHub Actions的cron表达式使用UTC时间，北京时间 = UTC时间 + 8小时
-> - 由于GitHub Actions同一时间任务较多，实际执行时间可能会有几分钟的延迟
+> ⚠️ Note:
+> - GitHub Actions cron expressions use UTC time, Beijing time = UTC time + 8 hours
+> - Due to high concurrent tasks on GitHub Actions, actual execution time may be delayed by a few minutes
 
-#### 3.4 手动触发（测试）
+#### 3.4 Manual Trigger (Test)
 
-除了定时执行，你也可以在 GitHub Actions 页面手动触发工作流进行测试：
-1. 进入你的仓库
-2. 点击 `Actions` 标签
-3. 选择 `morning` 工作流
-4. 点击 `Run workflow` 按钮
-5. 查看钉钉群是否收到消息
+In addition to scheduled execution, you can also manually trigger the workflow for testing on the GitHub Actions page:
+1. Enter your repository
+2. Click the `Actions` tab
+3. Select the `morning` workflow
+4. Click the `Run workflow` button
+5. Check if the DingTalk group receives the message
 
-## 📱 消息效果
+## 📱 Message Effect
 
-程序会发送Markdown格式的消息到钉钉群，包含以下内容：
+The program sends Markdown formatted messages to the DingTalk group, containing the following:
 
-- 🌅 早安问候
-- 📍 城市天气信息（支持多城市）
-  - ☁️ 天气状况
-  - 🌡️ 实时温度
-  - 💨 风向风力
-  - 💧 空气湿度
-  - 🕐 更新时间
-- 💬 每日一句名言/鸡汤
+- 🌙 Good evening greeting
+- 📍 Tomorrow's weather forecast for cities (supports multiple cities)
+  - ☁️ Weather conditions
+  - 🌡️ Real-time temperature
+  - 💨 Wind direction and force
+  - 💧 Air humidity
+  - 🕐 Update time
+- 💬 Daily quote/inspirational message
 
-## 📚 钉钉机器人消息类型参考
+## 📚 DingTalk Robot Message Type Reference
 
-本项目默认使用Markdown格式发送消息，钉钉机器人还支持其他多种消息类型。以下是各类型的详细说明：
+This project uses Markdown format by default to send messages. DingTalk robots also support other message types. The following are detailed descriptions of each type:
 
-### 支持的消息类型
+### Supported Message Types
 
-目前钉钉机器人支持发送的消息有5种：
-1. **文本 (text)** - 纯文本消息
-2. **链接 (link)** - 带链接的卡片消息
-3. **markdown** - Markdown格式消息（本项目使用）
-4. **ActionCard** - 交互式卡片消息
-5. **FeedCard** - 多条链接聚合消息
+Currently, DingTalk robots support sending 5 types of messages:
+1. **text** - Plain text message
+2. **link** - Card message with links
+3. **markdown** - Markdown formatted message (used by this project)
+4. **ActionCard** - Interactive card message
+5. **FeedCard** - Multiple link aggregation message
 
-具体需要根据自己的场景进行选择，以便能达到最好的展示样式。
+You need to choose based on your scenario to achieve the best display style.
 
-自定义机器人发送消息时，可以通过手机号码指定"被@人列表"。在"被@人列表"里面的人员收到该消息时，会有@消息提醒。免打扰会话仍然通知提醒，首屏出现"有人@你"
+Custom robots can specify "mentioned person list" by phone number when sending messages. People in the "mentioned person list" will receive @ message reminders. Do not disturb conversations will still notify, and "someone @you" will appear on the first screen.
 
-#### 文本TEXT
+#### Text Type
 
-文本型的消息类型，具体代码如下：
+Text message type, specific code as follows:
 
 ```json
 {
@@ -162,58 +162,58 @@ schedule:
         "isAtAll": false
     },
     "text": {
-        "content":"测试"
+        "content":"Test"
     },
     "msgtype":"text"
 }
 ```
 
-上述中涉及的参数类型分别如下：
+Parameter types involved in the above:
 
-| **参数**  | **参数类型** | **是否必填** | **说明**                                                     |
+| **Parameter**  | **Parameter Type** | **Required** | **Description**                                                     |
 | --------- | ------------ | ------------ | ------------------------------------------------------------ |
-| msgtype   | String       | 是           | 消息类型，此时固定为：text。                                 |
-| content   | String       | 是           | 消息内容。                                                   |
-| atMobiles | Array        | 否           | 被@人的手机号。**注意** 在content里添加@人的手机号，且只有在群内的成员才可被@，非群内成员手机号会被脱敏。 |
-| atUserIds | Array        | 否           | 被@人的用户userid。**注意** 在content里添加@人的userid。     |
-| isAtAll   | Boolean      | 否           | 是否@所有人。                                                |
+| msgtype   | String       | Yes           | Message type, fixed as: text.                                 |
+| content   | String       | Yes           | Message content.                                                   |
+| atMobiles | Array        | No           | Phone numbers of @mentioned people. **Note** Add @person's phone number in content, and only members in the group can be @mentioned, non-group member phone numbers will be desensitized. |
+| atUserIds | Array        | No           | User IDs of @mentioned people. **Note** Add @person's userid in content.     |
+| isAtAll   | Boolean      | No           | Whether to @everyone.                                                |
 
-#### 链接LINK
+#### Link Type
 
-链接型的消息类型，具体代码如下：
+Link message type, specific code as follows:
 
 ```json
 {
     "msgtype": "link", 
     "link": {
-        "text": "测试", 
-        "title": "测试", 
+        "text": "Test", 
+        "title": "Test", 
         "picUrl": "", 
         "messageUrl": "https://www.dingtalk.com/s?__biz=MzA4NjMwMTA2Ng==&mid=2650316842&idx=1&sn=60da3ea2b29f1dcc43a7c8e4a7c97a16&scene=2&srcid=09189AnRJEdIiWVaKltFzNTw&from=timeline&isappinstalled=0&key=&ascene=2&uin=&devicetype=android-23&version=26031933&nettype=WIFI"
     }
 }
 ```
 
-上述中涉及的参数类型分别如下：
+Parameter types involved in the above:
 
-| **参数**   | **参数类型** | 是否必填 | **说明**                                                     |
+| **Parameter**   | **Parameter Type** | Required | **Description**                                                     |
 | ---------- | ------------ | -------- | ------------------------------------------------------------ |
-| msgtype    | String       | 是       | 消息类型，此时固定为：link。                                 |
-| title      | String       | 是       | 消息标题。                                                   |
-| text       | String       | 是       | 消息内容。如果太长只会部分展示。                             |
-| messageUrl | String       | 是       | 点击消息跳转的URL，打开方式如下：移动端，在钉钉客户端内打开PC端默认侧边栏打开希望在外部浏览器打开，请参考[消息链接说明](https://open.dingtalk.com/document/app/message-link-description#section-7w8-4c2-9az) |
-| picUrl     | String       | 否       | 图片URL。                                                    |
+| msgtype    | String       | Yes       | Message type, fixed as: link.                                 |
+| title      | String       | Yes       | Message title.                                                   |
+| text       | String       | Yes       | Message content. If too long, only part will be displayed.             |
+| messageUrl | String       | Yes       | URL to jump to when clicking the message, opens as follows: Mobile, opens in DingTalk client, PC defaults to sidebar, for external browser, see [Message Link Description](https://open.dingtalk.com/document/app/message-link-description#section-7w8-4c2-9az) |
+| picUrl     | String       | No       | Image URL.                                                    |
 
-#### markdown类型
+#### Markdown Type
 
-markdown的消息类型，具体代码如下：
+Markdown message type, specific code as follows:
 
 ```json
 {
      "msgtype": "markdown",
      "markdown": {
-         "title":"测试",
-         "text": "#### 杭州天气 @150XXXXXXXX \n > 9度，西北风1级，空气良89，相对温度73%\n > ![screenshot](https://img.alicdn.com/tfs/TB1NwmBEL9TBuNjy1zbXXXpepXa-2400-1218.png)\n > ###### 10点20分发布 [天气](https://www.dingtalk.com) \n"
+         "title":"Test",
+         "text": "#### Hangzhou Weather @150XXXXXXXX \n > 9 degrees, northwest wind level 1, good air 89, relative humidity 73%\n > ![screenshot](https://img.alicdn.com/tfs/TB1NwmBEL9TBuNjy1zbXXXpepXa-2400-1218.png)\n > ###### Published at 10:20 [Weather](https://www.dingtalk.com) \n"
      },
       "at": {
           "atMobiles": [
@@ -227,66 +227,66 @@ markdown的消息类型，具体代码如下：
  }
 ```
 
-上述中涉及的参数类型分别如下：
+Parameter types involved in the above:
 
-| **参数**  | **类型** | 是否必填 | **说明**                                                     |
+| **Parameter**  | **Type** | Required | **Description**                                                     |
 | --------- | -------- | -------- | ------------------------------------------------------------ |
-| msgtype   | String   | 是       | 消息类型，此时固定为：markdown。                             |
-| title     | String   | 是       | 首屏会话透出的展示内容。                                     |
-| text      | String   | 是       | markdown格式的消息。                                         |
-| atMobiles | Array    | 否       | 被@人的手机号。**注意** 在text内容里要有@人的手机号，只有在群内的成员才可被@，非群内成员手机号会被脱敏。 |
-| atUserIds | Array    | 否       | 被@人的用户userid。**注意** 在content里添加@人的userid。     |
-| isAtAll   | Boolean  | 否       | 是否@所有人。                                                |
+| msgtype   | String   | Yes       | Message type, fixed as: markdown.                             |
+| title     | String   | Yes       | Display content on first screen conversation.                                     |
+| text      | String   | Yes       | Markdown formatted message.                                         |
+| atMobiles | Array    | No       | Phone numbers of @mentioned people. **Note** Must have @person's phone number in text content, only members in the group can be @mentioned, non-group member phone numbers will be desensitized. |
+| atUserIds | Array    | No       | User IDs of @mentioned people. **Note** Add @person's userid in content.     |
+| isAtAll   | Boolean  | No       | Whether to @everyone.                                                |
 
 
 
-#### 整体跳转ActionCard类型
+#### Overall Jump ActionCard Type
 
-整体跳转ActionCard的消息类型，具体代码如下：
+Overall jump ActionCard message type, specific code as follows:
 
 ```json
 {
     "actionCard": {
-        "title": "测试", 
-        "text": "测试", 
+        "title": "Test", 
+        "text": "Test", 
         "btnOrientation": "0", 
-        "singleTitle" : "测试",
+        "singleTitle" : "Test",
         "singleURL" : "https://www.dingtalk.com/"
     }, 
     "msgtype": "actionCard"
 }
 ```
 
-上述中涉及的参数类型分别如下：
+Parameter types involved in the above:
 
-| **参数**       | **类型** | **是否必填** | **说明**                                                     |
+| **Parameter**       | **Type** | **Required** | **Description**                                                     |
 | -------------- | -------- | ------------ | ------------------------------------------------------------ |
-| msgtype        | String   | 是           | 消息类型，此时固定为：actionCard。                           |
-| title          | String   | 是           | 首屏会话透出的展示内容。                                     |
-| text           | String   | 是           | markdown格式的消息。                                         |
-| singleTitle    | String   | 是           | 单个按钮的标题。**注意** 设置此项和singleURL后，btns无效。   |
-| singleURL      | String   | 是           | 点击消息跳转的URL，打开方式如下：移动端，在钉钉客户端内打开PC端默认侧边栏打开希望在外部浏览器打开，请参考[消息链接说明](https://open.dingtalk.com/document/app/message-link-description#section-7w8-4c2-9az) |
-| btnOrientation | String   | 否           | 0：按钮竖直排列1：按钮横向排列                               |
+| msgtype        | String   | Yes           | Message type, fixed as: actionCard.                           |
+| title          | String   | Yes           | Display content on first screen conversation.                                     |
+| text           | String   | Yes           | Markdown formatted message.                                         |
+| singleTitle    | String   | Yes           | Title of single button. **Note** After setting this and singleURL, btns is invalid.   |
+| singleURL      | String   | Yes           | URL to jump to when clicking the message, opens as follows: Mobile, opens in DingTalk client, PC defaults to sidebar, for external browser, see [Message Link Description](https://open.dingtalk.com/document/app/message-link-description#section-7w8-4c2-9az) |
+| btnOrientation | String   | No           | 0: Buttons arranged vertically, 1: Buttons arranged horizontally                               |
 
 
-#### 独立跳转ActionCard类型
+#### Independent Jump ActionCard Type
 
-独立跳转ActionCard的消息类型，具体代码如下：
+Independent jump ActionCard message type, specific code as follows:
 
 ```json
 {
     "msgtype": "actionCard",
     "actionCard": {
-        "title": "测试", 
-        "text": "测试", 
+        "title": "Test", 
+        "text": "Test", 
         "btnOrientation": "0", 
         "btns": [
             {
-                "title": "内容不错", 
+                "title": "Good content", 
                 "actionURL": "https://www.dingtalk.com/"
             }, 
             {
-                "title": "不感兴趣", 
+                "title": "Not interested", 
                 "actionURL": "https://www.dingtalk.com/"
             }
         ]
@@ -294,21 +294,21 @@ markdown的消息类型，具体代码如下：
 }
 ```
 
-上述中涉及的参数类型分别如下：
+Parameter types involved in the above:
 
-| **参数**       | **类型** | 是否必填 | 说明                                                         |
+| **Parameter**       | **Type** | Required | Description                                                         |
 | -------------- | -------- | -------- | ------------------------------------------------------------ |
-| msgtype        | String   | 是       | 此消息类型为固定actionCard。                                 |
-| title          | String   | 是       | 首屏会话透出的展示内容。                                     |
-| text           | String   | 是       | markdown格式的消息。                                         |
-| btns           | Array    | 是       | 按钮。                                                       |
-| title          | String   | 是       | 按钮标题。                                                   |
-| actionURL      | String   | 是       | 点击按钮触发的URL，打开方式如下：移动端，在钉钉客户端内打开PC端默认侧边栏打开希望在外部浏览器打开，请参考[消息链接说明](https://open.dingtalk.com/document/app/message-link-description#section-7w8-4c2-9az) |
-| btnOrientation | String   | 否       | 0：按钮竖直排列1：按钮横向排列                               |
+| msgtype        | String   | Yes       | This message type is fixed as actionCard.                                 |
+| title          | String   | Yes       | Display content on first screen conversation.                                     |
+| text           | String   | Yes       | Markdown formatted message.                                         |
+| btns           | Array    | Yes       | Buttons.                                                       |
+| title          | String   | Yes       | Button title.                                                   |
+| actionURL      | String   | Yes       | URL triggered by clicking the button, opens as follows: Mobile, opens in DingTalk client, PC defaults to sidebar, for external browser, see [Message Link Description](https://open.dingtalk.com/document/app/message-link-description#section-7w8-4c2-9az) |
+| btnOrientation | String   | No       | 0: Buttons arranged vertically, 1: Buttons arranged horizontally                               |
 
-#### FeedCard类型
+#### FeedCard Type
 
-FeedCard的消息类型，具体代码如下：
+FeedCard message type, specific code as follows:
 
 ```json
 {
@@ -316,12 +316,12 @@ FeedCard的消息类型，具体代码如下：
     "feedCard": {
         "links": [
             {
-                "title": "测试1", 
+                "title": "Test1", 
                 "messageURL": "https://www.dingtalk.com/", 
                 "picURL": "https://img.alicdn.com/tfs/TB1NwmBEL9TBuNjy1zbXXXpepXa-2400-1218.png"
             },
             {
-                "title": "测试2", 
+                "title": "Test2", 
                 "messageURL": "https://www.dingtalk.com/", 
                 "picURL": "https://img.alicdn.com/tfs/TB1NwmBEL9TBuNjy1zbXXXpepXa-2400-1218.png"
             }
@@ -330,105 +330,105 @@ FeedCard的消息类型，具体代码如下：
 }
 ```
 
-上述中涉及的参数类型分别如下：
+Parameter types involved in the above:
 
-| **参数**   | **类型** | 是否必填 | **说明**                                                     |
+| **Parameter**   | **Type** | Required | **Description**                                                     |
 | ---------- | -------- | -------- | ------------------------------------------------------------ |
-| msgtype    | String   | 是       | 此消息类型为固定feedCard。                                   |
-| title      | String   | 是       | 单条信息文本。                                               |
-| messageURL | String   | 是       | 点击单条信息到跳转链接。**说明** PC端跳转目标页面的方式，参考[消息链接在PC端侧边栏或者外部浏览器打开](https://open.dingtalk.com/document/app/message-link-description#section-7w8-4c2-9az)。 |
-| picURL     | String   | 是       | 单条信息后面图片的URL。                                      |
+| msgtype    | String   | Yes       | This message type is fixed as feedCard.                                   |
+| title      | String   | Yes       | Single message text.                                               |
+| messageURL | String   | Yes       | Link to jump to when clicking single message. **Note** For how PC opens target page, see [Message link opens in PC sidebar or external browser](https://open.dingtalk.com/document/app/message-link-description#section-7w8-4c2-9az). |
+| picURL     | String   | Yes       | URL of image behind single message.                                      |
 
-## 🛠️ 技术实现
+## 🛠️ Technical Implementation
 
-### 项目结构
+### Project Structure
 
 ```
 .
 ├── .github/
 │   └── workflows/
-│       └── main.yml          # GitHub Actions 工作流配置
-├── main.py                   # 主程序文件
-├── requirements.txt          # Python依赖列表
-└── README.md                 # 项目说明文档
+│       └── main.yml          # GitHub Actions workflow configuration
+├── main.py                   # Main program file
+├── requirements.txt          # Python dependency list
+└── README.md                 # Project documentation
 ```
 
-### 核心功能说明
+### Core Function Description
 
-#### 天气API集成
+#### Weather API Integration
 
-本项目使用高德地图天气API获取实时天气信息，相比其他天气API的优势：
-- ✅ 稳定可靠，服务质量高
-- ✅ 免费额度充足，个人使用足够
-- ✅ 支持多城市同时查询
-- ✅ 返回数据全面（温度、湿度、风力等）
+This project uses AMAP Weather API to get real-time weather information, advantages compared to other weather APIs:
+- ✅ Stable and reliable, high service quality
+- ✅ Sufficient free quota, enough for personal use
+- ✅ Supports multiple cities simultaneous query
+- ✅ Complete returned data (temperature, humidity, wind force, etc.)
 
-#### 错误处理机制
+#### Error Handling Mechanism
 
-代码实现了完善的错误处理：
-- 网络请求超时自动重试
-- API调用失败时使用默认数据
-- 异常情况下不会中断程序执行
-- 所有错误都会记录日志便于排查
+The code implements complete error handling:
+- Network request timeout automatic retry
+- Use default data when API call fails
+- Does not interrupt program execution in exceptional situations
+- All errors are logged for troubleshooting
 
-#### 消息格式化
+#### Message Formatting
 
-使用Markdown格式发送消息，支持：
-- 表情符号增强视觉效果
-- 层次清晰的信息组织
-- 支持多城市信息展示
-- 自动格式化单位（温度、湿度等）
+Use Markdown format to send messages, supports:
+- Emoji enhances visual effects
+- Clear hierarchical information organization
+- Supports multi-city information display
+- Automatic formatting of units (temperature, humidity, etc.)
 
-## 🔧 常见问题
+## 🔧 FAQ
 
-### Q1: 为什么消息没有按时发送？
-**A:** GitHub Actions的定时任务由于同时运行的任务较多，可能会有5-10分钟的延迟，这是正常现象。
+### Q1: Why are messages not sent on time?
+**A:** GitHub Actions scheduled tasks may have 5-10 minutes delay due to many concurrent running tasks, this is normal.
 
-### Q2: 如何修改消息内容？
-**A:** 编辑 `main.py` 文件中的消息模板部分，可以自定义消息格式和内容。
+### Q2: How to modify message content?
+**A:** Edit the message template part in the `main.py` file to customize message format and content.
 
-### Q3: 支持多少个城市同时查询？
-**A:** 理论上没有限制，但建议不超过5个城市，以保持消息的可读性。
+### Q3: How many cities can be queried simultaneously?
+**A:** Theoretically no limit, but recommend not exceeding 5 cities to maintain message readability.
 
-### Q4: 如何更换每日一句的API？
-**A:** 修改 `get_words()` 函数中的API地址即可，确保返回格式兼容。
+### Q4: How to replace the daily quote API?
+**A:** Modify the API address in the `get_words()` function, ensure the return format is compatible.
 
-### Q5: 可以修改发送时间吗？
-**A:** 可以，修改 `.github/workflows/main.yml` 中的 cron 表达式即可。注意使用UTC时间。
+### Q5: Can I change the sending time?
+**A:** Yes, modify the cron expression in `.github/workflows/main.yml`. Note to use UTC time.
 
-### Q6: Secrets配置错误会怎样？
-**A:** GitHub Actions会执行失败，可以在Actions页面查看详细的错误日志。
+### Q6: What happens if Secrets are configured incorrectly?
+**A:** GitHub Actions will fail to execute, you can view detailed error logs on the Actions page.
 
-## 📝 更新日志
+## 📝 Changelog
 
-### 最新版本特性
+### Latest Version Features
 
-- ✅ 集成高德地图天气API，数据更准确
-- ✅ 支持多城市天气查询
-- ✅ 优化Markdown消息格式，增加emoji
-- ✅ 完善错误处理和降级机制
-- ✅ 自动格式化天气数据单位
-- ✅ 支持手动触发工作流
+- ✅ Integrated AMAP Weather API, more accurate data
+- ✅ Supports multi-city weather query
+- ✅ Optimized Markdown message format, added emoji
+- ✅ Improved error handling and fallback mechanisms
+- ✅ Automatic formatting of weather data units
+- ✅ Supports manual workflow trigger
 
-## 🤝 项目地址
+## 🤝 Project Repository
 
 [GitHub Repository](https://github.com/liwei6677/Dingding-group-chat-robot-pushes-messages-regularly)
 
-## ☕ 鸣谢
+## ☕ Acknowledgments
 
-感谢以下参考的帮助：
+Thanks to the following references:
 
 - [https://www.ruanyifeng.com/blog/2019/09/getting-started-with-github-actions.html](https://www.ruanyifeng.com/blog/2019/09/getting-started-with-github-actions.html)
 - [https://docs.github.com/cn/actions/using-workflows/workflow-syntax-for-github-actions](https://docs.github.com/cn/actions/using-workflows/workflow-syntax-for-github-actions)
 - [https://lbs.amap.com/api/webservice/guide/api/weatherinfo](https://lbs.amap.com/api/webservice/guide/api/weatherinfo)
 - [https://open.dingtalk.com/document/robots/custom-robot-access](https://open.dingtalk.com/document/robots/custom-robot-access)
 
-> 均为互联网资料，如有侵权请联系删除。有问题可以点击Issues提问。
+> All are internet materials, please contact for deletion if infringement occurs. Issues can be raised by clicking Issues.
 
 ## 📄 License
 
-本项目仅供学习交流使用，请勿用于商业用途。
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-⭐ 如果这个项目对你有帮助，欢迎Star支持！
+⭐ If this project is helpful to you, please Star to support!
